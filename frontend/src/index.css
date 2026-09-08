@@ -1,87 +1,15 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 @layer base {
-  * { box-sizing: border-box; margin: 0; padding: 0; }
-  html { scroll-behavior: smooth; }
   body {
-    font-family: 'Inter', system-ui, sans-serif;
-    background-color: #f8fafc;
-    color: #0f172a;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-    overflow-x: hidden;
+    @apply bg-bgPrimary text-textPrimary font-body antialiased;
   }
-  ::-webkit-scrollbar { width: 6px; height: 6px; }
-  ::-webkit-scrollbar-track { background: #f1f5f9; }
-  ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 3px; }
-  ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
-}
-
-@layer components {
-  /* ── Clean Card (replacing glass) ── */
-  .glass {
-    background: #ffffff;
-    border: 1px solid #e2e8f0;
-    border-radius: 0.75rem;
-    box-shadow: 0 4px 10px -2px rgba(0, 0, 0, 0.05), inset 0 0 0 1px rgba(255, 255, 255, 0.8);
+  
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-display;
   }
-  .glass-hover {
-    transition: all 0.2s ease;
-  }
-  .glass-hover:hover {
-    border-color: #cbd5e1;
-    box-shadow: 0 6px 14px -3px rgba(0, 0, 0, 0.08), inset 0 0 0 1px rgba(255, 255, 255, 1);
-    transform: translateY(-2px);
-  }
-
-  /* ── Animated border (for alerts) ── */
-  .border-pulse-red {
-    animation: borderPulse 2s ease-in-out infinite;
-  }
-  @keyframes borderPulse {
-    0%, 100% { border-color: rgba(220, 38, 38, 0.2); }
-    50%       { border-color: rgba(220, 38, 38, 0.6); }
-  }
-
-  /* ── Status dot ── */
-  .status-dot {
-    width: 8px; height: 8px;
-    border-radius: 50%;
-    animation: statusPulse 2s ease-in-out infinite;
-  }
-  @keyframes statusPulse {
-    0%, 100% { opacity: 1; transform: scale(1); }
-    50%       { opacity: 0.5; transform: scale(1.2); }
-  }
-
-  /* ── Graph node ── */
-  .graph-node {
-    transition: all 0.2s ease;
-    cursor: pointer;
-  }
-  .graph-node:hover { transform: scale(1.1); fill: #0f172a; }
-
-  /* ── Slider ── */
-  input[type=range] {
-    -webkit-appearance: none;
-    appearance: none;
-    height: 4px;
-    border-radius: 9999px;
-    background: #e2e8f0;
-    outline: none;
-    width: 100%;
-  }
-  input[type=range]::-webkit-slider-thumb {
-    -webkit-appearance: none;
-    width: 14px; height: 14px;
-    border-radius: 50%;
-    background: #eab308;
-    cursor: pointer;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.3);
-    transition: transform 0.1s;
-  }
-  input[type=range]::-webkit-slider-thumb:hover { transform: scale(1.2); }
 }

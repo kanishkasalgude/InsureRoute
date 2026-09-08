@@ -1,0 +1,41 @@
+{
+  "modes": {
+    "road": {
+      "cost_per_km_inr": 35,
+      "co2_per_km_kg": 0.27,
+      "max_cargo_weight_tons": 30,
+      "weather_sensitivity": "high",
+      "base_insurance_rate": 0.003
+    },
+    "rail": {
+      "cost_per_km_inr": 18,
+      "co2_per_km_kg": 0.06,
+      "max_cargo_weight_tons": 500,
+      "weather_sensitivity": "low",
+      "base_insurance_rate": 0.0015,
+      "schedule_buffer_min": 60
+    },
+    "air": {
+      "cost_per_km_inr": 220,
+      "co2_per_km_kg": 0.95,
+      "max_cargo_weight_tons": 5,
+      "weather_sensitivity": "medium",
+      "base_insurance_rate": 0.002
+    },
+    "sea": {
+      "cost_per_km_inr": 8,
+      "co2_per_km_kg": 0.015,
+      "max_cargo_weight_tons": 50000,
+      "weather_sensitivity": "medium",
+      "base_insurance_rate": 0.0025,
+      "min_transit_days": 2
+    }
+  },
+  "transfer_penalties": {
+    "road_to_rail": {"time_min": 90, "cost_inr": 2500},
+    "road_to_air": {"time_min": 120, "cost_inr": 5000},
+    "road_to_sea": {"time_min": 180, "cost_inr": 3500},
+    "rail_to_road": {"time_min": 60, "cost_inr": 1500},
+    "air_to_road": {"time_min": 45, "cost_inr": 2000}
+  }
+}

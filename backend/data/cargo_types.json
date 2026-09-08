@@ -1,0 +1,11 @@
+{
+  "types": [
+    {"id": "electronics", "label": "Electronics", "fragility": "high", "perishability": "none", "risk_multiplier": 1.4, "max_temp_c": 40, "icon": ""},
+    {"id": "pharmaceuticals", "label": "Pharmaceuticals", "fragility": "medium", "perishability": "high", "risk_multiplier": 1.6, "max_temp_c": 25, "requires_cold_chain": true, "icon": ""},
+    {"id": "automotive", "label": "Automotive Parts", "fragility": "low", "perishability": "none", "risk_multiplier": 1.0, "icon": ""},
+    {"id": "fmcg", "label": "FMCG / Consumer Goods", "fragility": "low", "perishability": "medium", "risk_multiplier": 1.1, "icon": ""},
+    {"id": "chemicals", "label": "Industrial Chemicals", "fragility": "medium", "perishability": "none", "risk_multiplier": 1.5, "hazmat": true, "icon": "️"},
+    {"id": "textiles", "label": "Textiles", "fragility": "low", "perishability": "none", "risk_multiplier": 0.9, "icon": "🧵"},
+    {"id": "perishables", "label": "Fresh Produce / Perishables", "fragility": "high", "perishability": "critical", "risk_multiplier": 1.8, "max_temp_c": 8, "requires_cold_chain": true, "icon": "🥬"}
+  ]
+}

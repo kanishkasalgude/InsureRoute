@@ -12,10 +12,15 @@ env/
 venv/
 ENV/
 
+# Data files (large CSVs)
+*.csv
+
 # Environment Variables
 .env
 .env.*
+!.env.example
 .env.local
+.env.production
 .env.development.local
 .env.test.local
 .env.production.local
@@ -55,3 +60,5 @@ coverage/
 # Cache
 .eslintcache
 .stylelintcache
+
+sample/

@@ -1,0 +1,40 @@
+{
+  "nodes": [
+    {"id": "PUNE_DEPOT", "lat": 18.5204, "lon": 73.8567, "type": "depot", "name": "Pune Logistics Hub"},
+    {"id": "CP01", "lat": 18.5630, "lon": 73.7765, "type": "road_checkpoint", "name": "Khadki Toll"},
+    {"id": "CP02", "lat": 18.6161, "lon": 73.7286, "type": "road_checkpoint", "name": "Dehu Road"},
+    {"id": "CP03", "lat": 18.7403, "lon": 73.4786, "type": "road_checkpoint", "name": "Talegaon"},
+    {"id": "CP04", "lat": 18.8166, "lon": 73.3479, "type": "road_checkpoint", "name": "Khopoli"},
+    {"id": "CP05", "lat": 18.9067, "lon": 73.2497, "type": "road_checkpoint", "name": "Rasayani"},
+    {"id": "CP06", "lat": 19.0012, "lon": 73.1285, "type": "road_checkpoint", "name": "Panvel"},
+    {"id": "CP07", "lat": 19.0632, "lon": 72.9978, "type": "road_checkpoint", "name": "Vashi"},
+    {"id": "CP08", "lat": 19.0760, "lon": 72.8777, "type": "road_checkpoint", "name": "Mumbai Port Entry"},
+    {"id": "RN01", "lat": 18.5318, "lon": 73.8473, "type": "rail_hub", "name": "Pune Railway Station"},
+    {"id": "RN02", "lat": 18.9667, "lon": 72.8333, "type": "rail_hub", "name": "CSMT Mumbai"},
+    {"id": "PT01", "lat": 18.9550, "lon": 72.8359, "type": "port", "name": "JNPT Port"},
+    {"id": "AP01", "lat": 18.5793, "lon": 73.9089, "type": "airport", "name": "Pune Airport"},
+    {"id": "MUMBAI_DEST", "lat": 19.0760, "lon": 72.8777, "type": "destination", "name": "Mumbai Distribution Center"}
+  ],
+  "edges": [
+    {"from": "PUNE_DEPOT", "to": "CP01", "distance_km": 8, "mode": "road", "base_time_min": 15, "alt_route": false},
+    {"from": "CP01", "to": "CP02", "distance_km": 12, "mode": "road", "base_time_min": 20, "alt_route": false},
+    {"from": "CP02", "to": "CP03", "distance_km": 25, "mode": "road", "base_time_min": 35, "alt_route": false},
+    {"from": "CP03", "to": "CP04", "distance_km": 30, "mode": "road", "base_time_min": 45, "alt_route": false},
+    {"from": "CP04", "to": "CP05", "distance_km": 18, "mode": "road", "base_time_min": 28, "alt_route": false},
+    {"from": "CP05", "to": "CP06", "distance_km": 22, "mode": "road", "base_time_min": 30, "alt_route": false},
+    {"from": "CP06", "to": "CP07", "distance_km": 15, "mode": "road", "base_time_min": 22, "alt_route": false},
+    {"from": "CP07", "to": "CP08", "distance_km": 10, "mode": "road", "base_time_min": 18, "alt_route": false},
+    {"from": "CP08", "to": "MUMBAI_DEST", "distance_km": 5, "mode": "road", "base_time_min": 12, "alt_route": false},
+    
+    {"from": "CP02", "to": "CP04", "distance_km": 52, "mode": "road", "base_time_min": 75, "alt_route": true, "label": "Direct Bypass"},
+    {"from": "CP05", "to": "CP07", "distance_km": 35, "mode": "road", "base_time_min": 50, "alt_route": true, "label": "Panvel Bypass"},
+    {"from": "PUNE_DEPOT", "to": "CP03", "distance_km": 42, "mode": "road", "base_time_min": 60, "alt_route": true, "label": "Express Link"},
+
+    {"from": "PUNE_DEPOT", "to": "RN01", "distance_km": 3, "mode": "road", "base_time_min": 8, "alt_route": false},
+    {"from": "RN01", "to": "RN02", "distance_km": 192, "mode": "rail", "base_time_min": 210, "alt_route": true},
+    {"from": "RN02", "to": "MUMBAI_DEST", "distance_km": 5, "mode": "road", "base_time_min": 15, "alt_route": true},
+    {"from": "PUNE_DEPOT", "to": "AP01", "distance_km": 10, "mode": "road", "base_time_min": 20, "alt_route": false},
+    {"from": "AP01", "to": "PT01", "distance_km": 150, "mode": "air", "base_time_min": 45, "alt_route": true},
+    {"from": "PT01", "to": "MUMBAI_DEST", "distance_km": 15, "mode": "road", "base_time_min": 25, "alt_route": true}
+  ]
+}
