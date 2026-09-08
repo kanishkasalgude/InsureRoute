@@ -1,6 +1,6 @@
 import { motion, animate } from 'framer-motion'
 import { useEffect, useRef } from 'react'
-import { AlertTriangle, Clock, TrendingUp, PiggyBank } from 'lucide-react'
+import { AlertTriangle, Map, Navigation, Cloud } from 'lucide-react'
 
 function AnimatedNumber({ value, prefix = '', suffix = '', decimals = 1, className = '' }) {
   const ref = useRef(null)
@@ -26,45 +26,45 @@ function AnimatedNumber({ value, prefix = '', suffix = '', decimals = 1, classNa
 
 const CARDS = [
   {
-    key: 'sla',
-    label: 'SLA Breach Rate',
+    key: 'weather',
+    label: 'Weather',
     suffix: '%',
-    icon: AlertTriangle,
-    accent: 'border-t-danger',
-    iconColor: 'text-danger',
-    desc: 'of total shipments',
-    threshold: (v) => v > 10 ? 'danger' : v > 5 ? 'warning' : 'success',
+    icon: Cloud,
+    accent: 'border-t-blue-500',
+    iconColor: 'text-blue-500',
+    desc: 'severity',
+    threshold: (v) => v > 50 ? 'danger' : v > 20 ? 'warning' : 'success',
   },
   {
-    key: 'delay',
-    label: 'Avg Delay',
-    suffix: '%',
-    prefix: '+',
-    icon: Clock,
+    key: 'traffic',
+    label: 'Traffic Delay',
+    suffix: 'x',
+    prefix: '',
+    icon: Navigation,
     accent: 'border-t-warning',
     iconColor: 'text-warning',
-    desc: 'vs scheduled transit',
-    threshold: (v) => v > 15 ? 'danger' : v > 7 ? 'warning' : 'success',
+    desc: 'ratio',
+    threshold: (v) => v > 2 ? 'danger' : v > 1.2 ? 'warning' : 'success',
+  },
+  {
+    key: 'distance',
+    label: 'Distance',
+    suffix: ' km',
+    icon: Map,
+    accent: 'border-t-success',
+    iconColor: 'text-success',
+    desc: 'total route length',
+    threshold: () => 'success',
   },
   {
     key: 'risk',
     label: 'Current Risk',
     suffix: '%',
-    icon: TrendingUp,
-    accent: 'border-t-primary',
-    iconColor: 'text-primary',
-    desc: 'system probability',
+    icon: AlertTriangle,
+    accent: 'border-t-danger',
+    iconColor: 'text-danger',
+    desc: 'disruption probability',
     threshold: (v) => v > 60 ? 'danger' : v > 30 ? 'warning' : 'success',
-  },
-  {
-    key: 'savings',
-    label: 'Cost Savings',
-    suffix: '%',
-    icon: PiggyBank,
-    accent: 'border-t-success',
-    iconColor: 'text-success',
-    desc: 'via active rerouting',
-    threshold: () => 'success',
   },
 ]
 

@@ -101,13 +101,19 @@ export default function Dashboard() {
 
   // ── Initial fetch + 3s auto-refresh ───────────────────────────────────────
   useEffect(() => { fetchTick() }, [])
+  useEffect(() => { fetchTick() }, [params.origin, params.destination])
   useEffect(() => {
     const t = setInterval(() => fetchTick(), 3000)
     return () => clearInterval(t)
   }, [fetchTick])
 
   const ins = data?.insurance
-  const kpis = data?.kpis
+  const kpis = {
+    weather: (data?.raw?.weather_severity ?? 0) * 100,
+    traffic: data?.raw?.delay_ratio ?? 1,
+    distance: data?.route?.total_distance_km ?? 0,
+    risk: data?.kpis?.risk ?? 0
+  }
   const route = data?.route
   const nodes = data?.nodes ?? MOCK_NODES
   const edges = data?.edges ?? MOCK_EDGES
@@ -160,7 +166,7 @@ export default function Dashboard() {
             <GraphView nodes={nodes} edges={edges} route={route} params={params} setParams={setParams} />
           </div>
           <div className="flex flex-col h-full min-h-0">
-            <InsurancePanel insurance={ins} disrupted={disrupted} />
+            <InsurancePanel route={route} disrupted={disrupted} />
           </div>
         </div>
 

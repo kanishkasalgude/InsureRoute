@@ -6,7 +6,7 @@ const BASE = 'http://localhost:8000'
 const client = axios.create({ baseURL: BASE, timeout: 5000 })
 
 // ── Mock data factory (used when API is unavailable) ────────────────────────
-export function makeMockData(injected = false) {
+export function makeMockData(injected = false, params = {}) {
   const risk    = injected ? 72 + Math.random() * 20 : 25 + Math.random() * 40
   const prob    = risk / 100
   const cargo   = 70000
@@ -15,8 +15,80 @@ export function makeMockData(injected = false) {
   const savings = Math.round(before - after)
   const savPct  = Math.round((savings / before) * 100)
 
-  const PATH_NORMAL    = ['Pune_Hub', 'Nashik_Hub', 'Mumbai_Hub']
-  const PATH_REROUTED  = ['Pune_Hub', 'Nashik_Hub', 'Surat_Hub', 'Navi Mumbai', 'Mumbai_Hub']
+  const origin = params.origin || 'Pune_Hub'
+  const destination = params.destination || 'Mumbai_Hub'
+  
+  // BFS to find a valid path
+  const adj = {}
+  EDGE_PAIRS.forEach(([u, v]) => {
+    if (!adj[u]) adj[u] = []
+    if (!adj[v]) adj[v] = []
+    adj[u].push(v)
+    adj[v].push(u)
+  })
+  
+  // Dijkstra's algorithm to find the shortest path based on geographical distance
+  function getDistance(u, v) {
+    const n1 = MOCK_NODES.find(n => n.id === u)
+    const n2 = MOCK_NODES.find(n => n.id === v)
+    if (!n1 || !n2) return 1
+    return Math.hypot(n1.lon - n2.lon, n1.lat - n2.lat)
+  }
+
+  function findPath(start, end) {
+    const dist = {}
+    const prev = {}
+    const unvisited = new Set(Object.keys(adj))
+    
+    // Ensure start and end are in the set
+    unvisited.add(start)
+    unvisited.add(end)
+
+    for (const node of unvisited) {
+      dist[node] = Infinity
+      prev[node] = null
+    }
+    dist[start] = 0
+
+    while (unvisited.size > 0) {
+      let u = null
+      let minDist = Infinity
+      for (const node of unvisited) {
+        if (dist[node] < minDist) {
+          minDist = dist[node]
+          u = node
+        }
+      }
+      
+      if (u === null || u === end) break
+      unvisited.delete(u)
+
+      for (const v of (adj[u] || [])) {
+        if (!unvisited.has(v)) continue
+        const alt = dist[u] + getDistance(u, v)
+        if (alt < dist[v]) {
+          dist[v] = alt
+          prev[v] = u
+        }
+      }
+    }
+
+    const path = []
+    let curr = end
+    while (curr) {
+      path.unshift(curr)
+      curr = prev[curr]
+    }
+    if (path[0] === start) return path
+    return [start, end]
+  }
+
+  const PATH_NORMAL = findPath(origin, destination)
+  // Just make rerouted path somewhat different by inserting a random hub if possible
+  const PATH_REROUTED = PATH_NORMAL.length >= 2 
+    ? [PATH_NORMAL[0], 'Navi_Mumbai_DC', ...PATH_NORMAL.slice(1)] 
+    : PATH_NORMAL
+
   const path = injected ? PATH_REROUTED : PATH_NORMAL
 
   return {
@@ -42,8 +114,8 @@ export function makeMockData(injected = false) {
     route: {
       path,
       disruption_detected: injected,
-      origin:      'Pune_Hub',
-      destination: 'Mumbai_Hub',
+      origin:      origin,
+      destination: destination,
       total_time_hrs:   injected ? 9.2 : 4.1,
       total_distance_km: injected ? 487 : 149,
       total_cost_inr:    injected ? 12400 : 5800,
@@ -58,6 +130,18 @@ export function makeMockData(injected = false) {
     edges: MOCK_EDGES,
   }
 }
+
+const EDGE_PAIRS = [
+  ['Pune_Hub','Mumbai_Hub'],['Pune_Hub','Nashik_Hub'],['Nashik_Hub','Mumbai_Hub'],
+  ['Nashik_Hub','Surat_Hub'],['Surat_Hub','Navi_Mumbai_DC'],['Navi_Mumbai_DC','Mumbai_Hub'],
+  ['Mumbai_Hub','Ahmedabad_Hub'],['Delhi_Hub','Jaipur_Hub'],['Jaipur_Hub','Ahmedabad_Hub'],
+  ['Delhi_Hub','Lucknow_Hub'],['Lucknow_Hub','Patna_Hub'],['Kolkata_Hub','Patna_Hub'],
+  ['Chennai_Hub','Bangalore_Hub'],['Bangalore_Hub','Hyderabad_Hub'],
+  ['Hyderabad_Hub','Visakhapatnam_Hub'],['Coimbatore_Hub','Chennai_Hub'],
+  ['Kochi_Hub','Coimbatore_Hub'],['Nagpur_Hub','Hyderabad_Hub'],
+  ['Nagpur_Hub','Bhopal_Hub'],['Bhopal_Hub','Indore_Hub'],
+  ['Indore_Hub','Ahmedabad_Hub'],['Mumbai_Hub','Pune_Hub'],
+]
 
 // ── Network nodes (Indian supply chain hubs, lon/lat) ─────────────────────
 export const MOCK_NODES = [
@@ -83,18 +167,6 @@ export const MOCK_NODES = [
   { id: 'Kochi_Hub',          label: 'Kochi Hub',         lon: 76.3, lat: 10.0 },
 ]
 
-const EDGE_PAIRS = [
-  ['Pune_Hub','Mumbai_Hub'],['Pune_Hub','Nashik_Hub'],['Nashik_Hub','Mumbai_Hub'],
-  ['Nashik_Hub','Surat_Hub'],['Surat_Hub','Navi_Mumbai_DC'],['Navi_Mumbai_DC','Mumbai_Hub'],
-  ['Mumbai_Hub','Ahmedabad_Hub'],['Delhi_Hub','Jaipur_Hub'],['Jaipur_Hub','Ahmedabad_Hub'],
-  ['Delhi_Hub','Lucknow_Hub'],['Lucknow_Hub','Patna_Hub'],['Kolkata_Hub','Patna_Hub'],
-  ['Chennai_Hub','Bangalore_Hub'],['Bangalore_Hub','Hyderabad_Hub'],
-  ['Hyderabad_Hub','Visakhapatnam_Hub'],['Coimbatore_Hub','Chennai_Hub'],
-  ['Kochi_Hub','Coimbatore_Hub'],['Nagpur_Hub','Hyderabad_Hub'],
-  ['Nagpur_Hub','Bhopal_Hub'],['Bhopal_Hub','Indore_Hub'],
-  ['Indore_Hub','Ahmedabad_Hub'],['Mumbai_Hub','Pune_Hub'],
-]
-
 export const MOCK_EDGES = EDGE_PAIRS.map(([s, t]) => ({ source: s, target: t }))
 
 // ── API calls ────────────────────────────────────────────────────────────────
@@ -103,7 +175,7 @@ export async function fetchData(params = {}) {
     const res = await client.get('/data', { params })
     return { data: res.data, mock: false }
   } catch {
-    return { data: makeMockData(false), mock: true }
+    return { data: makeMockData(false, params), mock: true }
   }
 }
 
@@ -119,6 +191,6 @@ export async function injectDisruption(params = {}) {
     })
     return { data: res.data, mock: false }
   } catch {
-    return { data: makeMockData(true), mock: true }
+    return { data: makeMockData(true, params), mock: true }
   }
 }
